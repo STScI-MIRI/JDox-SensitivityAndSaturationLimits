@@ -1,4 +1,4 @@
-# JDox-Values
+# JDox-SensitivityAndSaturationLimits
 
 This repository contains code to produce MIRI sensitivity and saturation limit plots for JDox, based on Pandeia calculations. The input for the code are data tables produced using the Pandeia ETC engine by K. Pontoppidan for the following modes/settings:
 
