@@ -279,6 +279,131 @@ def make_mrs_plots(version=None, save=False, outfile='out.png', style='jdocs'):
             
             
     return
+    
+    
+def sens_plot(version=None, save=False, outfile='out.png', style='jdocs'):
+    
+    '''
+    Function that will produce plot of sensitivity plots both point and extended sources, for imager, LRS and MRS.
+    
+    Parameters:
+    -----------
+    - version (string): version number
+    - save (boolean): should the plot be saved to file? default: 'False'
+    - outfile (string): output filename. default: 'out.png'
+    - style (string): plotting style. default: 'jdocs' -- TO DO
+    
+    
+    '''
+    plt.close('all')
+    
+    ishort = [0, 3, 6, 9]
+    imed = [i + 1 for i in ishort]
+    ilong = [i + 2 for i in ishort]
+    mrslabs = ['MRS short', '', '', '', 'MRS medium', '', '', '', 'MRS long', '', '', '']
+    
+    modes = ['imaging', 'lrs', 'mrs']
+    
+    # LRS only has point source numbers
+    src = ['point', 'extended']
+    ylab = ['flux density (mJy)', 'surface brightness (mJy arcsec$^{-2}$)']
+    sens_label = 'SNR = 10 in 10 ksec'
+    vlabel = 'Generated with ETCv{}'.format(version)
+    
+    fig, ax = plt.subplots(figsize=[8,6])
+    
+    for m in modes:
+        data = load_data(mode=m, version=version, src='point')
+        if m == 'imaging':
+            ax.semilogy(data['wavelengths'], data['lim_fluxes'], ls = '', marker='o', ms=10, label='imager')
+        elif m == 'lrs':
+            ax.semilogy(data['wavelengths'][0], data['lim_fluxes'][0], lw=2, label='LRS slitless')
+            ax.semilogy(data['wavelengths'][1], data['lim_fluxes'][1], lw=2, label='LRS slit')
+        else:
+            for sh in ishort:
+                ax.semilogy(data['wavelengths'][sh], data['lim_fluxes'][sh], lw=2, c='#56B4E9', label = mrslabs[sh])
+            for m in imed:
+                ax.semilogy(data['wavelengths'][m], data['lim_fluxes'][m], lw=2, c='#CC79A7', label = mrslabs[m])
+            for l in ilong:
+                ax.semilogy(data['wavelengths'][l], data['lim_fluxes'][l], lw=2, c='#F0E442', label = mrslabs[l])
+    ax.set_xlabel('wavelength ($\mu$m)')
+    ax.set_ylabel('flux density (mJy)', fontsize='large')
+    ax.set_title('MIRI point source sensitivities (continuum)')
+    ax.annotate(sens_label, (0.7,0.15), fontsize=9, xycoords='figure fraction')
+    ax.annotate(vlabel, (0.7, 0.12), fontsize=9, xycoords='figure fraction')
+    ax.grid(alpha=0.5, which='both')
+    ax.legend(loc='best', fontsize='large')
+    fig.show()
+    
+    if save:
+        new_outfile = 'plots/ETC{0}/sens_all_point.png'.format(version)
+        plt.savefig(new_outfile)
+    return 
+    
+def bright_plot(version=None, save=False, outfile='out.png', style='jdocs'):
+    
+    '''
+    Function that will produce plot of bright limits plots both point and extended sources, for imager, LRS and MRS.
+    
+    Parameters:
+    -----------
+    - version (string): version number
+    - save (boolean): should the plot be saved to file? default: 'False'
+    - outfile (string): output filename. default: 'out.png'
+    - style (string): plotting style. default: 'jdocs' -- TO DO
+    
+    
+    '''
+    plt.close('all')
+    
+    ishort = [0, 3, 6, 9]
+    imed = [i + 1 for i in ishort]
+    ilong = [i + 2 for i in ishort]
+    mrslabs = ['MRS short', '', '', '', 'MRS medium', '', '', '', 'MRS long', '', '', '']
+    
+    modes = ['imaging', 'lrs', 'mrs']
+    
+    frame_ratio = 0.159 / 2.7705
+    
+    # LRS only has point source numbers
+    src = ['point', 'extended']
+    ylab = ['flux density (mJy)', 'surface brightness (mJy arcsec$^{-2}$)']
+    sat_label = 'Signal reaching 70% full well in NGROUPS = 5'
+    vlabel = 'Generated with ETCv{}'.format(version)
+    
+    fig, ax = plt.subplots(figsize=[8,6])
+
+    
+    im = load_data(mode='imaging', version=version, src='point')
+    ax.semilogy(im['wavelengths'], im['sat_limits'], ls = '', marker='o', ms=10, label='imager')
+    lrs = load_data(mode='lrs', version=version, src='point')
+    ax.semilogy(lrs['wavelengths'][0], lrs['sat_limits'][0] / frame_ratio, lw=2, label='LRS slitless')
+    ax.semilogy(lrs['wavelengths'][1], lrs['sat_limits'][1], lw=2, label='LRS slit')
+    mrs = load_data(mode='mrs', version=version, src='point')
+    for sh in ishort:
+        ax.semilogy(mrs['wavelengths'][sh], mrs['sat_limits'][sh], lw=2, c='#56B4E9', label = mrslabs[sh])
+    for m in imed:
+        ax.semilogy(mrs['wavelengths'][m], mrs['sat_limits'][m], lw=2, c='#CC79A7',  label = mrslabs[m])
+    for l in ilong:
+        ax.semilogy(mrs['wavelengths'][l], mrs['sat_limits'][l], lw=2, c='#F0E442',  label = mrslabs[l])
+    ax.set_xlabel('wavelength ($\mu$m)')
+    ax.set_ylabel('flux density (mJy)', fontsize='large')
+    ax.set_title('MIRI point source bright limits (continuum)')
+    ax.annotate(sat_label, (0.5,0.15), fontsize=9, xycoords='figure fraction')
+    ax.annotate(vlabel, (0.5, 0.12), fontsize=9, xycoords='figure fraction')
+    ax.grid(alpha=0.5, which='both')
+    ax.legend(loc='best', fontsize='large')
+    fig.show()
+    
+    if save:
+        new_outfile = 'plots/ETC{0}/sens_all_point.png'.format(version)
+        plt.savefig(new_outfile)
+    return 
+    
+    
+    
+    
+    
         
         
         
