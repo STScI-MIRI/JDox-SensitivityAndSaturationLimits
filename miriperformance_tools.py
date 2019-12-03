@@ -92,12 +92,12 @@ def make_imager_plots(version=None, save=False, outfile='out.png', style='jdocs'
         fig1, ax1 = plt.subplots(figsize=[8,6])
         ax1.semilogy(data['wavelengths'], data['lim_fluxes'], ls='', marker='o', ms=12, label='min detectable signal')
         #ax1.semilogy(data['wavelengths'], data['lim_fluxes'], ls='', label='min detectable signal')
-        ax1.set_xlabel('wavelength ($\mu$m)', fontsize='large')
-        ax1.set_ylabel(yl, fontsize='large')
+        ax1.set_xlabel('wavelength ($\mu$m)')
+        ax1.set_ylabel(yl)
         ax1.set_title('MIRI Imager sensitivity ({} sources)'.format(s))
         ax1.annotate(sens_label, (0.7,0.15), fontsize=9, xycoords='figure fraction')
         ax1.annotate(vlabel, (0.7,0.12), fontsize=9, xycoords='figure fraction')
-        ax1.grid(alpha=0.5, which='both')
+        ax1.grid(b=True)
         fig1.show()
         if save:
             new_outfile = 'plots/ETC{0}/{1}_{2}_sens.png'.format(version, outfile.split('.')[0], s)
@@ -106,12 +106,12 @@ def make_imager_plots(version=None, save=False, outfile='out.png', style='jdocs'
         fig2, ax2 = plt.subplots(figsize=[8,6])
         ax2.semilogy(data['wavelengths'], data['sat_limits'], ls='', marker='o', ms=12, label='saturation limits')
         #ax2.semilogy(data['wavelengths'], data['sat_limits'], ls='', label='saturation limits')
-        ax2.set_xlabel('wavelength ($\mu$m)', fontsize='large')
-        ax2.set_ylabel(yl, fontsize='large')
+        ax2.set_xlabel('wavelength ($\mu$m)')
+        ax2.set_ylabel(yl)
         ax2.set_title('MIRI Imager bright limits ({} sources)'.format(s))
         ax2.annotate(sat_label, (0.5, 0.15), fontsize=9, xycoords='figure fraction')
         ax2.annotate(vlabel, (0.5, 0.12), fontsize=9, xycoords='figure fraction')
-        ax2.grid(alpha=0.5, which='both')
+        ax2.grid(b=True)
         fig2.show()
         if save:
             new_outfile = 'plots/ETC{0}/imager_{1}_{2}_sat.png'.format(version, outfile.split('.')[0], s)
@@ -336,7 +336,7 @@ def sens_plot(version=None, save=False, outfile='out.png', style='jdocs'):
     fig.show()
     
     if save:
-        new_outfile = 'plots/ETC{0}/sens_all_point.png'.format(version)
+        new_outfile = 'plots/ETC{0}/sens_all_point_v{0}.png'.format(version)
         plt.savefig(new_outfile)
     return 
     
@@ -381,22 +381,22 @@ def bright_plot(version=None, save=False, outfile='out.png', style='jdocs'):
     ax.semilogy(lrs['wavelengths'][1], lrs['sat_limits'][1], lw=2, label='LRS slit')
     mrs = load_data(mode='mrs', version=version, src='point')
     for sh in ishort:
-        ax.semilogy(mrs['wavelengths'][sh], mrs['sat_limits'][sh], lw=2, c='#56B4E9', label = mrslabs[sh])
+        ax.semilogy(mrs['wavelengths'][sh], mrs['sat_limits'][sh], c='#56B4E9', label = mrslabs[sh])
     for m in imed:
-        ax.semilogy(mrs['wavelengths'][m], mrs['sat_limits'][m], lw=2, c='#CC79A7',  label = mrslabs[m])
+        ax.semilogy(mrs['wavelengths'][m], mrs['sat_limits'][m], c='#CC79A7',  label = mrslabs[m])
     for l in ilong:
-        ax.semilogy(mrs['wavelengths'][l], mrs['sat_limits'][l], lw=2, c='#F0E442',  label = mrslabs[l])
+        ax.semilogy(mrs['wavelengths'][l], mrs['sat_limits'][l], c='#F0E442',  label = mrslabs[l])
     ax.set_xlabel('wavelength ($\mu$m)')
     ax.set_ylabel('flux density (mJy)', fontsize='large')
     ax.set_title('MIRI point source bright limits (continuum)')
     ax.annotate(sat_label, (0.5,0.15), fontsize=9, xycoords='figure fraction')
     ax.annotate(vlabel, (0.5, 0.12), fontsize=9, xycoords='figure fraction')
-    ax.grid(alpha=0.5, which='both')
-    ax.legend(loc='best', fontsize='large')
+    #ax.grid(alpha=0.5, which='both')
+    ax.legend(loc='best')
     fig.show()
     
     if save:
-        new_outfile = 'plots/ETC{0}/sens_all_point.png'.format(version)
+        new_outfile = 'plots/ETC{0}/bright_all_point_v{0}.png'.format(version)
         plt.savefig(new_outfile)
     return 
     
