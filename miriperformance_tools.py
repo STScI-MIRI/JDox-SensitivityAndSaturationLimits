@@ -55,7 +55,7 @@ def load_data(version=None, mode=None, src=None):
     
     return data
 
-def make_imager_plots(version=None, save=False, outfile='out.png', style='jdocs'):
+def make_imager_plots(version=None, save=False, outfile='out.png'):
     
     '''
     Function that will produce plot of sensitivity and bright limits for the imager for both point and extended sources (2 plots in total).
@@ -121,7 +121,7 @@ def make_imager_plots(version=None, save=False, outfile='out.png', style='jdocs'
     return
         
         
-def make_lrs_plots(version=None, save=False, outfile='out.png', style='jdocs'):
+def make_lrs_plots(version=None, save=False, outfile='out.png'):
     
     '''
     Function that will produce plot of sensitivity and bright limits for the LRS for both point and extended sources (4 plots in total).
@@ -164,8 +164,8 @@ def make_lrs_plots(version=None, save=False, outfile='out.png', style='jdocs'):
         ax1.set_title('MIRI LRS sensitivity (point sources)'.format(s))
         ax1.annotate(sens_label, (0.7, 0.15), fontsize=9, xycoords='figure fraction')
         ax1.annotate(vlabel, (0.7, 0.12), fontsize=10, xycoords='figure fraction')
-        ax1.grid(alpha=0.5, which='both')
-        ax1.legend(loc='best', fontsize='large')
+        ax1.grid(b=True)
+        ax1.legend()
         fig1.show()
         if save:
             new_outfile = 'plots/ETC{0}/lrs_{1}_{2}_sens.png'.format(version, outfile.split('.')[0], s)
@@ -177,8 +177,8 @@ def make_lrs_plots(version=None, save=False, outfile='out.png', style='jdocs'):
         ax2.set_xlabel('wavelength ($\mu$m)', fontsize='large')
         ax2.set_ylabel('flux density (mJy)', fontsize='large')
         ax2.set_title('MIRI LRS bright limits ({} sources)'.format(s))
-        ax2.annotate(sat_label, (9., 2.4), fontsize=10)
-        ax2.annotate(vlabel, (9., 1.5), fontsize=10)
+        ax2.annotate(sat_label, (0.55, 0.15), fontsize=9)
+        ax2.annotate(vlabel, (0.55, 0.12), fontsize=9)
         ax2.grid(alpha=0.5, which='both')
         ax2.legend(loc='best', fontsize='large')
         fig2.show()
